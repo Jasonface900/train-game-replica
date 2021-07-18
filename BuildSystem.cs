@@ -10,7 +10,7 @@ public class BuildSystem : MonoBehaviour{
 
     private void Awake() {
         if(instance != null) {
-            Debug.LogWarning("There is more than one StoryManager in scene\nSelf Destruct activated");
+            Debug.LogWarning($"There is more than one Singleton {this.name} in scene\nSelf Destruct activated");
 
             Destroy(this);
         }

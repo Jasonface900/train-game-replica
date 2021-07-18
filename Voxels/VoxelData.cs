@@ -57,7 +57,7 @@ public class VoxelData{
 
     public bool CheckIfNoNeighbors(int x, int y, int z){
         for(int i = 0; i < 6; i++){
-            if(GetNeighbor(x,y,z,(Direction)i) == new Voxel(BlockType.Air))
+            if(GetNeighbor(x,y,z,(Direction)i).Equals(new Voxel(BlockType.Air)))
                 return true;
         }
         return false;

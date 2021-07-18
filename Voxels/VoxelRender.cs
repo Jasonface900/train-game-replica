@@ -36,12 +36,12 @@ public class VoxelRender : MonoBehaviour {
     void Start(){
         VoxelData data = new ProceduralTerrain(Size, octave).GenerateTerrain();
         lastData = data;
-        GenerateVoxelMesh(data);
-        Debug.Log("Generated Voxel Mesh");
+        //GenerateVoxelMesh(data);
+        //Debug.Log("Generated Voxel Mesh");
         UpdateColliderObjects(data);
         Debug.Log("Updated Collider Objects");
-        UpdateMesh();
-        Debug.Log("Updated Mesh");
+        //UpdateMesh();
+        //Debug.Log("Updated Mesh");
     }
 
     void Update(){
@@ -51,8 +51,8 @@ public class VoxelRender : MonoBehaviour {
             VoxelData data = new ProceduralTerrain(Size, octave).GenerateTerrain();
             colliders = new GameObject[Size.x, Size.y, Size.z];
 
-            GenerateVoxelMesh(data);
-            UpdateMesh();
+            //GenerateVoxelMesh(data);
+            //UpdateMesh();
             destroyOldColliderObjects();
             UpdateColliderObjects(data);
 
@@ -67,8 +67,8 @@ public class VoxelRender : MonoBehaviour {
             foreach(Vector3Int voxel in collidersHit){
                 lastData.SetCell(voxel.x, voxel.y, voxel.z);
             }
-            GenerateVoxelMesh(lastData);
-            UpdateMesh();
+            //GenerateVoxelMesh(lastData);
+            //UpdateMesh();
             UpdateColliderObjects(lastData);
             collidersHit = new List<Vector3Int>();
         }
@@ -89,11 +89,15 @@ public class VoxelRender : MonoBehaviour {
                         continue;
                     }
                     if(data.CheckIfNoNeighbors(x,y,z) &&  !colliders[x,y,z]){
-                        GameObject voxel;
-                        voxel = MakeColliderObject(new Vector3((float)x * scale, (float)y * scale, (float)z * scale), scale);
-                        voxel.GetComponent<CollisionObject>().SetIndex(x,y,z);
-                        //Debug.Log(index);
-                        colliders[x,y,z] = voxel;
+                        GameObject collider;
+                        collider = MakeColliderObject(new Vector3((float)x * scale, (float)y * scale, (float)z * scale), scale);
+                        collider.GetComponent<CollisionObject>().SetIndex(x,y,z);
+                        collider.AddComponent<MeshFilter>();
+                        collider.GetComponent<MeshFilter>().mesh = data.GetCell(x,y,z).GetMesh();
+                        collider.AddComponent<MeshRenderer>();
+                        collider.GetComponent<MeshRenderer>().material = data.GetCell(x,y,z).GetMaterial();
+                        //Debug.Log(data.GetCell(x,y,z).GetMaterial());
+                        colliders[x,y,z] = collider;
                     }
                 }
             }
@@ -103,6 +107,7 @@ public class VoxelRender : MonoBehaviour {
     GameObject MakeColliderObject(Vector3 colliderPos, float colliderScale){
         GameObject collider = new GameObject("Collider ("+(int)colliderPos.x+", "+(int)colliderPos.y+", "+(int)colliderPos.z+")", typeof(BoxCollider));
         collider.AddComponent<CollisionObject>();
+        collider.GetComponent<BoxCollider>().center = new Vector3(0,.5f, 0);
         Transform transform = collider.GetComponent<Transform>();
         transform.SetParent(root);
         transform.localPosition = new Vector3(0,0,0);

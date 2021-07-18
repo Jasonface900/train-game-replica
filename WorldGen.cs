@@ -16,6 +16,8 @@ public class WorldGen : MonoBehaviour {
     public float strength3;
 
     private void Start() {
+        Pathfinding.instance.SetARRAY(Size);
+        Pathfinding.instance.WorldPosition = Vector3.zero;
         Generate_World(Size);
     }
 
@@ -23,7 +25,7 @@ public class WorldGen : MonoBehaviour {
         return a + t * (b - a);
     }
 
-    float[] Perlinate(){
+    float[] Perlinate() {
         // Width and height of the texture in pixels.
         int pixWidth  = (int)Size.x;
         int pixHeight = (int)Size.z;
@@ -48,11 +50,9 @@ public class WorldGen : MonoBehaviour {
         // For each pixel in the texture...
         float y = 0.0F;
 
-        while (y < pixHeight)
-        {
+        while(y < pixHeight) {
             float x = 0.0F;
-            while (x < pixWidth)
-            {
+            while(x < pixWidth) {
                 float x1 = xOrg + x / pixWidth * scale1;
                 float x2 = xOrg + x / pixWidth * scale2;
                 float x3 = xOrg + x / pixWidth * scale3;
@@ -82,8 +82,11 @@ public class WorldGen : MonoBehaviour {
             for(int y = 0; y < Size.y; y++) {
                 for(int z = 0; z < Size.z; z++) {
                     if(y==0) {
+                         
+
                         GameObject I = Instantiate(ground, new Vector3(x * offset, (int)(noise[x * (int)Size.x + z]*100)-30 * offset, z * offset), Quaternion.identity, transform);
                         I.GetComponentInChildren<Renderer>().material.color = new Color(.15f, noise[x * (int)Size.x + z], .1f);
+                        //grid = new GridXZ<int>(1, 1, 1f, I.transform.position, ((GridXZ<int> g, int x, int z) => new int()));
                     }
                     else
                         Instantiate(stone, new Vector3(x * offset, (int)(noise[x * (int)Size.x + z]*100)-(30+y) * offset, z * offset), Quaternion.identity, transform);

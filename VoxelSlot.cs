@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slot : MonoBehaviour {
+public class VoxelSlot : MonoBehaviour {
     private Item item;
     public Vector3 offset;
 
@@ -16,26 +16,26 @@ public class Slot : MonoBehaviour {
         if(BuildSystem.instance.held_Object != null && item == null && BuildSystem.instance.held_Object.name != "") {
             //start position
             Debug.Log("reached the instanci");
-            Instantiate(BuildSystem.instance.held_Object.cross, offset + gameObject.transform.position, Quaternion.identity, gameObject.transform);
+            Instantiate(BuildSystem.instance.held_Object.cross, offset + gameObject.transform.position, Quaternion.identity);
         }
     }
 
     public void Start() {
         rend = GetComponent<Renderer>();
-        StartColor = rend.material.color;
+        //StartColor = rend.material.color;
     }
     //public something golbal
     private void OnMouseEnter() {
         //make it glow white
-        rend.material.color = hoverColor;
+        //rend.material.color = hoverColor;
         //rest positions
-        if(Input.GetMouseButton(0) && BuildSystem.instance.held_Object != null && item == null && BuildSystem.instance.held_Object.name != "") {
+        if(Input.GetMouseButton(1) && BuildSystem.instance.held_Object != null && item == null && BuildSystem.instance.held_Object.name != "") {
             Debug.Log("build on enter");
-            Instantiate(BuildSystem.instance.held_Object.cross, offset + gameObject.transform.position, Quaternion.identity,gameObject.transform);
+            Instantiate(BuildSystem.instance.held_Object.cross, offset + gameObject.transform.position, Quaternion.identity);
         }
     }
     private void OnMouseExit() {
         //end position
-        rend.material.color = StartColor;
+        //rend.material.color = StartColor;
     }
 }

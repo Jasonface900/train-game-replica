@@ -5,12 +5,27 @@ public class Voxel{
     
     BlockType type;
     Mesh mesh;
+    Material material;
 
     public Voxel(BlockType type){
-        mesh = null;
-        if(type != BlockType.Air)
-            mesh = Resources.Load("Objects/TestVoxel") as Mesh;
         this.type = type;
+        if(type != BlockType.Air){
+            mesh = Resources.Load<Mesh>("TestVoxel");
+            material = Resources.Load<Material>("Palette");
+            //Debug.Log(material);
+        }
+        else{
+            mesh = null;
+            material = null;
+        }
+    }
+
+    public Mesh GetMesh(){
+        return mesh;
+    }
+
+    public Material GetMaterial(){
+        return material;
     }
 
     public override string ToString(){
